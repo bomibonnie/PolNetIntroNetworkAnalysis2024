@@ -52,14 +52,14 @@ plot(net_igraph) #default
 
 windows()
 plot(net_igraph,
-     edge.arrow.size=.5,
-     edge.curved=0.2,
+     edge.arrow.size=0.8,
+     edge.curved=0.3,
      edge.color="black",
-     edge.width=1.5,
+     edge.width=1.2,
      vertex.size=5, 
-     vertex.frame.color="gray",
-     vertex.color="white",
-     vertex.label.cex=1,
+     vertex.frame.color="black",
+     vertex.color="pink",
+     vertex.label.cex=1.5,
      vertex.label.dist=1.2,
      vertex.label.color="black")
 
@@ -72,9 +72,9 @@ plot(net_igraph2,
      edge.color="black",
      edge.width=1.5,
      vertex.size=5, 
-     vertex.frame.color="gray",
-     vertex.color="white",
-     vertex.label.cex=1,
+     vertex.frame.color="black",
+     vertex.color="pink",
+     vertex.label.cex=1.5,
      vertex.label.dist=1.2,
      vertex.label.color="black")
 
@@ -86,10 +86,10 @@ plot(net_igraph3,
      edge.color="black",
      edge.width=1.5,
      vertex.size=5, 
-     vertex.frame.color="gray",
-     vertex.color="white",
-     vertex.label.cex=1,
-     vertex.label.dist=1,
+     vertex.frame.color="black",
+     vertex.color="pink",
+     vertex.label.cex=1.5,
+     vertex.label.dist=1.2,
      vertex.label.color="black")
 
 ## Directed, Weighted 
@@ -111,13 +111,14 @@ windows()
 plot(net_igraph,
      edge.width=1.5*E(net_igraph)$Weight,
      edge.arrow.size=.6,
-     edge.curved=0.2,
+     edge.curved=0.3,
      edge.color=E(net_igraph)$color,
      vertex.size=7, 
-     vertex.frame.color="white", 
-     vertex.color=ifelse(V(net_igraph)$gender=="M", "gray", "black"),
+     vertex.frame.color="black", 
+     vertex.color=ifelse(V(net_igraph)$gender=="M", "gray", "white"),
      vertex.label.cex=1.5,
-     vertex.label.dist=1.5)
+     vertex.label.dist=1.2,
+     vertex.label.color="black")
 
 ## Undirected, Weighted 
 net_igraph2 ## not collapsed
@@ -135,10 +136,11 @@ plot(net_igraph2,
      edge.width=1.5*E(net_igraph)$Weight,
      edge.color=E(net_igraph2)$color,
      vertex.size=8, 
-     vertex.frame.color="white", 
-     vertex.color=ifelse(V(net_igraph2)$gender=="M", "gray", "black"),
+     vertex.frame.color="black", 
+     vertex.color=ifelse(V(net_igraph2)$gender=="M", "gray", "white"),
      vertex.label.cex=1.5,
-     vertex.label.dist=1.5)
+     vertex.label.dist=1.2,
+     vertex.label.color="black")
 
 ## Two-mode networks
 ### Load the data
@@ -157,21 +159,23 @@ net2.bp
 ### Make the "events" distinct from actors
 V(net2)$type ## Events and actors are distinguished in type
 
-V(net2)$shape <- c("square", "circle")[V(net2)$type+1]
+V(net2)$shape <- c("rectangle", "circle")[V(net2)$type+1]
 V(net2)$color <- c("gray", "white")[V(net2)$type+1]
 V(net2)$lcolor <- c("navy", "darkred")[V(net2)$type+1]
 
-V(net2)$size <- c(1, 0.9)[V(net2)$type+1]
-V(net2)$vsize <- c(10, 5)[V(net2)$type+1]
-
+V(net2)$size <- c(0.8, 0.7)[V(net2)$type+1]
+V(net2)$vsize <- c(25, 5)[V(net2)$type+1]
+V(net2)$ldist <-c(0, 1.2)[V(net2)$type+1]
 ### Plot it
 windows()
 plot(net2, 
+     edge.color="black",
      vertex.label.color=V(net2)$lcolor, 
      vertex.label.cex=V(net2)$size,
      vertex.size=V(net2)$vsize,
      vertex.frame.color="black",
-     vertex.label.dist=1.5) 
+     vertex.label.dist=V(net2)$ldist,
+     vertex.label.color="black") 
 
 ## Real data: defense pacts (ATOP: Leeds et al. 2002)
 atop <- import("atop_sample2.csv")
@@ -188,7 +192,7 @@ plot(atop1997und,
      vertex.label=NA,
      edge.width=1.5, 
      vertex.size=2.5, 
-     vertex.color="blue",
+     vertex.color="darkred",
      layout=layout_with_kk)
 
 windows()
@@ -199,7 +203,7 @@ plot(atop1997und,
      edge.width=1.5, 
      vertex.size=2.5, 
      vertex.frame.color="black", 
-     vertex.color="blue",
+     vertex.color="darkred",
      layout=layout_with_kk)
 
 
@@ -302,10 +306,13 @@ summary(net_igraph)
 #null: The number of pairs with no connection between them.
 
 dyad.census(net_igraph)
+#total pairs: (6*5)/2=15
+#null: 15-1-7=7
 
 ## Triads
 ?triad.census
 triad.census(net_igraph)
+# mutual, non-mutual, or no connections for each
 ### E.g.030T: a->e<-b, a->b
 ###           a->d<-b, a->b
 
@@ -368,7 +375,6 @@ betweenness(atop1997und, directed = FALSE)
 ### Closeness (directed or undirected)
 closeness(net_igraph)
 closeness(atop1997und)
-
 
 ############Session 3############
 
@@ -451,7 +457,6 @@ degree_signed(pnnet_1980, type = "pos")
 degree_signed(pnnet_1980, type = "neg")
 degree_signed(pnnet_1980, type = "ratio")
 degree_signed(pnnet_1980, type = "net")
-
 
 ## Positive and negative centrality
 pn_index(pnnet_1980) # range: -1 to 2
